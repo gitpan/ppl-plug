@@ -52,7 +52,8 @@ available to Perl/Tk and Perl/OpenGL programs.  This allows them to display
 themselves within the browser window.  For Perl/Tk, this only seems to work with
 Tk800.xxx.  The hash buckets are as follows:
 
-	Plugin::brinfo{xwindow_id} -- contains the XWID of the browser.
+	Plugin::brinfo{xwindow_id} -- contains the XWID of the browser
+				     (currently undefined for Win32).
 	Plugin::brinfo{x_min}      -- the x-coordinate of the upper left corner
                                       of the browser-provided window, in pixels.
 	Plugin::brinfo{y_min}      -- y-coordinate of the upper left corner.
@@ -80,5 +81,14 @@ That warning aside, please try it out.  This is currently alpha code and hasn't
 yet experienced Eric Raymond's obligatory rewrite, so it's expected to undergo 
 many revisions.  Please feel free to help with that process in any way you like,
 with suggestions, flames, code contributions or whatever.
+
+With this release, 0.95, we've added a Win32 version.  It is not presently as 
+complete as the Unix version in that the displayed windows end up on the
+root window rather on the browser.  But it's useful even so and perhaps 
+someone else will see how to make it display on the browser.  If so, please
+let me know.  This version was built on NT 4.0 with VC++ 5.0.  I've included
+a generated Makefile that works with nmake.  Please let me know if you
+succeed at building it in some other environment.  See the rEADME.Win32 for
+addtional information.
 
 Frank Holtry

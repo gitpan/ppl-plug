@@ -1,0 +1,35 @@
+#!/opt/exp/perl/bin/perl -w
+
+use Tk;
+use strict;
+
+my $mw;
+my @extra_args;
+if (defined $Plugin::brinfo{xwindow_id}) {
+      push(@extra_args, "-use" => $Plugin::brinfo{xwindow_id});
+}
+
+$mw = new MainWindow @extra_args;
+
+#if (defined $Plugin::brinfo{x_len} and defined $Plugin::brinfo{y_len}) {
+#    $mw->geometry($Plugin::brinfo{x_len} . "x" . $Plugin::brinfo{y_len});
+#} else {
+#    $mw->geometry("160x40");
+#}
+
+my $fm1 = $mw->Frame( -container => "true", -height => 40, -width => 80)->pack( -side => 'left');
+my $fm2 = $mw->Frame(-container => "true", -height => 40, -width => 80)->pack( -side => 'left');
+
+my $fmid1 = oct($fm1->id());
+my $fmid2 = oct($fm2->id());
+
+my $tl1 = $mw->Toplevel( -use => $fmid1, -height => 40, -width => 80);
+my $tl2 = $mw->Toplevel( -use => $fmid2, -height => 40, -width => 80);
+
+my $bttn1 = $tl1->Button( -text => "Bye!", -command => sub { exit })->pack();
+my $bttn2 = $tl2->Button( -text => "Bye!", -command => sub { exit })->pack();
+
+MainLoop;
+
+
+

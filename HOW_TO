@@ -135,4 +135,4 @@ The second line returned by the cgi script is simply the authorization code.
 It should be a single-character string, with the character code of the
 authorization level you wish applied to this URL.
 
-For an example, see perlplus-secure.cgi in the src/ directory.
+For an example, see perlplus-secure.xxx.cgi  in the examples/cgi-bin directory.

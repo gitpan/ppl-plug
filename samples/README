@@ -27,3 +27,9 @@ ptk_test.ppl (2) A simple Perl/Tk test pattern.
 
 In addition, there are some simple html files for cube, quest, fun and
 ptk_test to illustrate how to embed them in a web page.
+
+The cgi-bin test programs can now be found in the cgi-bin subdir.
+
+perlplus-secure.sh.cgi -- a shell script version
+perlplus-secure.perl.cgi -- same program in perl, may work with mod_perl but
+                            hasn't been tried there yet.

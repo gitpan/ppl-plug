@@ -1,0 +1,106 @@
+#!/opt/exp/perl/bin/perl
+#
+
+use LWP::UserAgent;
+use Tk;
+use strict;
+
+my $mainwin;
+
+if ( defined $Plugin::brinfo{xwindow_id} ){
+
+	$mainwin = MainWindow->new( '-use' => $Plugin::brinfo{xwindow_id});
+
+} else {
+
+	$mainwin = MainWindow->new;
+}
+
+my $bttn = $mainwin->Button( -text => 'Exit', 
+			-command => sub { exit; } )->pack( -side => 'top');
+my $text = $mainwin->Scrolled("Text")->pack( -side => 'top');
+
+&set_fonts;
+&get_info;
+
+MainLoop;
+
+
+sub get_info{
+	my $ua = new LWP::UserAgent;
+	$ua->agent("AgentName/0.1 " . $ua->agent);
+
+	my $req = new HTTP::Request POST=> 'http://dura.dr.lucent.com:8080/perl/cot_n_web.cgi';
+	$req->content_type('application/x-archive-cgi');
+	$req->authorization_basic('fholtry', 'ug0tc0t');
+
+	my $response = $ua->request($req);
+	if ($response->is_success) {
+		my $line;
+		my $word;
+		$_ = $response->{_content};
+		foreach $line (split /\n/, $_){
+
+		   foreach $word (split /\s/, $line){
+			my $rand_num = rand 5;
+			my $sword = sprintf("%s ",$word);
+			if ( $rand_num <= 1){
+			     $text->insert("end", $sword, ['adobe24']);
+			}elsif ( $rand_num <= 2){
+			     $text->insert("end", $sword, ['adobe10']);
+			}elsif ( $rand_num <= 3){
+			     $text->insert("end", $sword, ['agarded']);
+			}elsif ( $rand_num <= 4){
+			     $text->insert("end", $sword, ['booklt14']);
+			}else{
+			     $text->insert("end", $sword, ['adobeB']);
+			}
+		   }
+	  	   $text->insert("end", "\n");
+		}
+	} else {
+		$text->insert("end", "Sorry, request failed!\n");
+	}
+}
+sub set_fonts{
+
+	if(defined $Plugin::brinfo{xwindow_id}){
+		#set fonts for UNIX
+
+		$text->tagConfigure('adobe24',
+			-background => '#ff6342',
+			-font => "-adobe-courier-medium-o-normal--24-240-75-75-m-150-iso8859-1"
+		);
+		$text->tagConfigure("adobe10",
+			-background => "#ffffff",
+			-font => "-adobe-courier-medium-o-normal--10-100-75-75-m-60-iso8859-1");
+		$text->tagConfigure("adobeB",
+			-background => "#adde63",
+			-font => "-adobe-courier-bold-o-normal--14-100-100-100-m-90-iso8859-1");
+		$text->tagConfigure("agarded",
+			-background => "#ffffff",
+			-font => "-urw-itc avant garde-demi-o-normal-sans-12-120-72-72-p-68-iso8859-1");
+		$text->tagConfigure("booklt14",
+			-background => "#ffffff",
+			-font => "-urw-itc bookman-light-r-normal--14-140-72-72-p-80-iso8859-1");
+	}else {
+		#set fonts for Win32
+
+		$text->tagConfigure('adobe24',
+			-background => '#ff6342',
+			-font => "Arial 24 normal");
+		$text->tagConfigure("adobe10",
+			-background => "#ffffff",
+			-font => "Arial 10  normal");
+		$text->tagConfigure("adobeB",
+			-background => "#adde63",
+			-font => "Arial 14 bold");
+		$text->tagConfigure("agarded",
+			-background => "#ffffff",
+			-font => "ComicSansMS 12 normal");
+		$text->tagConfigure("booklt14",
+			-background => "#ffffff",
+			-font => "BookmanOldStyle 14 italic ");
+
+	}
+}

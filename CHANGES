@@ -1,0 +1,5 @@
+====0.95========
+added code to Makefile for freebsd and hp-ux
+moved the cgi-bin samples to examples/cgi-bin
+updated documentation.
+added Win32 dir with alpha win32 version of plugin

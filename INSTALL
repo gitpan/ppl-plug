@@ -56,6 +56,9 @@ OPTIMIZER is whatever compiler option you need to set for the level of
 optimization you want your compiler to apply to the compiled code.  For many,
 -O works.  It can be left blank.
 
+MY_CFLAGS is any additional flags your compiler may need to generate a 
+dynamically loadable library object.  It should at least contain ${OPTIMIZER}.
+
 MIME is a string that identifies the mime-type and file name extension that the
 plug-in will be called to respond to.  The format of the entry is:
 

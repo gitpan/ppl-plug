@@ -1,0 +1,92 @@
+Making PerlPlus Plugin version 0.95 for Solaris
+make[1]: Entering directory `/usr/add-on/exptools_build/test_version/src/modules/ppl-plug-0.95'
+/usr/add-on/cygnus/gnupro-98r1/bin/sparc-sun-solaris2.5.1-gcc -c -O -DXP_UNIX -DDEBUG=0 -DPERL_EXE_PATH=\"/usr/local/bin/perl\" -I./src -I/usr/include -DVERSION=\""0.95"\"  -DSECURE_CGI=\""http://dura.dr.lucent.com:8080/perl/perlplus-secure.cgi"\" -DMIME_TYPE=\""application/x-perlplus:.ppl:Perl"\" -DCGI_TYPE=\""Content-type: application/x-secure-cgi\nContent-length:"\" -DALLOW_ENV_CONFIG=0 -DPERL5005=1 src/npunix.c
+/usr/add-on/cygnus/gnupro-98r1/bin/sparc-sun-solaris2.5.1-gcc -c -O -DXP_UNIX -DDEBUG=0 -DPERL_EXE_PATH=\"/usr/local/bin/perl\" -I./src -I/usr/include -DVERSION=\""0.95"\"  -DSECURE_CGI=\""http://dura.dr.lucent.com:8080/perl/perlplus-secure.cgi"\" -DMIME_TYPE=\""application/x-perlplus:.ppl:Perl"\" -DCGI_TYPE=\""Content-type: application/x-secure-cgi\nContent-length:"\" -DALLOW_ENV_CONFIG=0 -DPERL5005=1 src/npperlplus.c
+gcc -shared -lc -o perlplusplugin.so npunix.o npperlplus.o
+tooluse.log: errno: 13: Permission denied
+:	Your mailfile was found to be corrupted
+	(Content-length mismatch).
+	Message #20 may be truncated,
+	with another message concatenated to it.
+
+From dialcce@gate.net Mon May 17 11:31:14 1999
+Return-Path: <ptkdb-approval@world.std.com>
+Received: from auemlsrv.firewall.lucent.com by bighorn.dr.lucent.com (SMI-8.6/EMS-1.4.1 sol2)
+	id LAA27875; Mon, 17 May 1999 11:31:14 -0600
+Received: from europe.std.com (europe.std.com [199.172.62.20])
+	by auemlsrv.firewall.lucent.com (Pro-8.9.3/8.9.3) with ESMTP id NAA08566
+	for <fholtry@bighorn.dr.lucent.com>; Mon, 17 May 1999 13:31:09 -0400 (EDT)
+Received: by europe.std.com (STD1.2/BZS-8-1.0)
+	id NAA02043; Mon, 17 May 1999 13:29:55 -0400 (EDT)
+Received: from world.std.com by europe.std.com (STD1.2/BZS-8-1.0)
+	id NAA02027; Mon, 17 May 1999 13:29:53 -0400 (EDT)
+Received: from pima.gate.net by world.std.com (TheWorld/Spike-2.0)
+	id AA28299; Mon, 17 May 1999 13:29:52 -0400
+Received: from afotr ([199.227.177.13] (may be forged)) by pima.gate.net (8.8.6/8.6.12) with SMTP id NAA113944 for <ptkdb@world.std.com>; Mon, 17 May 1999 13:25:02 -0400
+Message-Id: <003301bea08a$d3cde650$0db1e3c7@afotr.intelcosys.com>
+From: "Ed McGuigan" <dialcce@gate.net>
+To: <ptkdb@world.std.com>
+Subject: Re: 3rd Perl Conf, 20mins on ptkdb
+Date: Mon, 17 May 1999 13:29:32 -0400
+Mime-Version: 1.0
+Content-Type: text/plain;
+	charset="iso-8859-1"
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+X-Msmail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 4.72.2106.4
+X-Mimeole: Produced By Microsoft MimeOLE V4.72.2106.4
+Sender: ptkdb-approval@world.std.com
+Precedence: list
+Reply-To: ptkdb@world.std.com
+Content-Length: 1564
+Status: O
+
+Hi Andrew:
+
+I think you should concentrate on your debugger.
+
+I think it is a very significant tool, something that Perl has been sorely
+lacking. It serves as a learning tool for the newcomer as well as a
+productivity booster for the more experienced. It really helped me dive into
+the dynamic data structures almost as soon as I started programming Perl,
+because I could quickly find where I had screwed up.
+
+I assume you know a lot about the Perl debugger internals and would perhaps
+have some insight into how the debugger might be improved.
+
+Regards,
+
+Ed McGuigan.
+
+-----Original Message-----
+From: Andrew E Page <aep@world.std.com>
+To: ptkdb@world.std.com <ptkdb@world.std.com>; ptk@lists.stanford.edu
+<ptk@lists.stanford.edu>
+Date: Monday, May 17, 1999 10:59 AM
+Subject: 3rd Perl Conf, 20mins on ptkdb
+
+
+>
+>   I've been asked to speak for 20 minutes at the 3rd Annual Perl
+>conference in Monterey, CA.  I'd be interested to know what people
+>would like to hear about, if they are planning on attending of
+>if they could attend.  I can think of a spectrum of topics
+>to include:
+>
+>     A)  Debugging with Ptkdb
+>     B)  Perl Debugger internals
+>     C)  Software and the Creative Process
+>     D)  Economics in the Free Software Model
+>
+>
+>To unsubscribe send mail to ptkdb-request@world.std.com with 'unsubscribe'
+>in the message body.
+>ptkdb software available at http://world.std.com/~aep/ptkdb
+>
+
+To unsubscribe send mail to ptkdb-request@world.std.com with 'unsubscribe'
+in the message body.
+ptkdb software available at http://world.std.com/~aep/ptkdb
+
+? 
