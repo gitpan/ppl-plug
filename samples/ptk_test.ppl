@@ -1,0 +1,182 @@
+#!/usr/bin/perl
+use Tk;
+my $mainwin = new MainWindow( '-use' => $Plugin::brinfo{xwindow_id},
+	-borderwidth=>10,
+	-relief=>'sunken'
+);
+
+$mainwin->gridColumnconfigure(0, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridColumnconfigure(1, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridColumnconfigure(2, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridColumnconfigure(3, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridColumnconfigure(4, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridRowconfigure(0, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridRowconfigure(1, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridRowconfigure(2, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridRowconfigure(3, -minsize=>144, -weight=>0, -pad=>5);
+$mainwin->gridRowconfigure(4, -minsize=>144, -weight=>0, -pad=>5);
+
+ my $mainframe00=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>0,-row=>0,-in=>$mainwin);
+ my $mainframe01=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>0,-row=>1,-in=>$mainwin);
+ my $mainframe02=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>0,-row=>2,-in=>$mainwin);
+ my $mainframe03=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>0,-row=>3,-in=>$mainwin);
+ my $mainframe04=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>0,-row=>4,-in=>$mainwin);
+ my $mainframe10=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>1,-row=>0,-in=>$mainwin);
+ my $mainframe11=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>1,-row=>1,-in=>$mainwin);
+ my $mainframe12=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>1,-row=>2,-in=>$mainwin);
+ my $mainframe13=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>1,-row=>3,-in=>$mainwin);
+ my $mainframe14=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>1,-row=>4,-in=>$mainwin);
+ my $mainframe20=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>2,-row=>0,-in=>$mainwin);
+ my $mainframe21=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>2,-row=>1,-in=>$mainwin);
+ my $mainframe22=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>2,-row=>2,-in=>$mainwin);
+ my $mainframe23=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>2,-row=>3,-in=>$mainwin);
+ my $mainframe24=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>2,-row=>4,-in=>$mainwin);
+ my $mainframe30=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>3,-row=>0,-in=>$mainwin);
+ my $mainframe31=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>3,-row=>1,-in=>$mainwin);
+ my $mainframe32=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>3,-row=>2,-in=>$mainwin);
+ my $mainframe33=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>3,-row=>3,-in=>$mainwin);
+ my $mainframe34=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>3,-row=>4,-in=>$mainwin);
+ my $mainframe40=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>4,-row=>0,-in=>$mainwin);
+ my $mainframe41=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>4,-row=>1,-in=>$mainwin);
+ my $mainframe42=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>4,-row=>2,-in=>$mainwin);
+ my $mainframe43=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>4,-row=>3,-in=>$mainwin);
+ my $mainframe44=$mainwin->Frame( 
+ 	-width=>60,
+ 	-height=>60,
+ 	-borderwidth=>5,
+ 	-relief=>'raised'
+ )->grid(-column=>4,-row=>4,-in=>$mainwin);
+ 
+$mainframe44->Label(-text => "Gaia's Gracious Greetings!")->pack;
+(
+	-in=>$toplevel
+	-side => 'top',
+	-anchor => 'center',
+);
+$mainframe44->Button(-text => "Quit", -command => sub{exit} )->pack;
+(
+	-in=>$toplevel,
+	-side => 'top',
+	-anchor => 'center',
+);
+MainLoop;

@@ -1,0 +1,84 @@
+			
+			The PerlPlusPlugin
+
+This project grew out of the desire of the authors to launch Perl/Tk programs
+from Netscape browser sessions.  Initially, we used Stan Melax's libopenglplugin
+plugin, hoping that only minor modifications would be required to make it do
+Perl/Tk as well.  It became obvious very quickly that the security applied by
+Stan via the Safe module was too restrictive for Perl/Tk.  Unfortunately,
+loosening the restrictions sufficiently for Perl/Tk would allow dangerously 
+insecure programs to be accessed and run.  In order to provide a reasonable
+degree of security and still make the plugin useful for Perl/Tk programs, we
+chose to implement both an Opcodes-based mechanism that is configurable at build
+time, and an authorization mechanism based on using a cgi-bin script to
+authorize each URL the user attempts to browse with the plugin.
+
+When a user browses a file that causes the browser to load and start the
+plugin, two things happen.  First, the browsed file is copied to a temporary
+location. Then, the URL that was browsed is passed to a cgi script using a 
+POST request to the server.  The cgi script returns an authorization code
+to the plugin indicating whether the URL is considered safe or not and to what
+degree.  We have established six levels of "safeness" in the current
+implementation.  Level 0 is the "not safe to run" level and causes the plugin
+to delete the temporary file and return immediately to the browser.  Levels
+1-5 use opcode restrictions to limit what sorts of programs can be run.  Level
+1 is the default level as described in the Opcode module documentation.  It
+won't run Perl/Tk, but is safe for many other kinds of Perl programs,
+including many Perl/OpenGL programs.  Level 2 is intended to provide the
+minimum number of opcodes needed to run a Perl/Tk program.  As this is being
+written, just prior to the first alpha release, it's not certain that the
+current set of opcodes fully meets the implied criteria, but it seems to
+work with at least many of the major widgets.  Hopefully, the correct set of
+these will evolve as more people use the plugin.  Level 3 extends level 2 to
+all but the most dangerous opcodes with Level 4 supplying all the rest (and no
+security whatever via the opcode mechanism).  Level 5 is intended to be user
+customizable, although the mechanism for doing that at present is a bit
+awkward, requiring that the implementor make changes to the macros in the
+np_perl.h file.
+
+The cgi script can take any steps it likes to determine the authorization
+level for a URL. The script supplied with the plugin does a lookup on the URL
+and the associated authorization code and returns the code to the plugin.
+However, authorizations could be based on many other things, such as time of
+day, user or host running the browser, etc.  Once the cgi has responded with
+the authorization code, the plugin prepends the appropriate Opcode::
+functions to the saved program and execs a Perl interpreter with the
+temporary file as one of the arguments (unless, of course, the code returned
+was '0'.)  See the INSTALL and HOW_TO documents for additional information
+regarding setting up the CGI script.
+
+The plugin also creates a hash (Plugin::brinfo{}) to make the window parameters
+available to Perl/Tk and Perl/OpenGL programs.  This allows them to display
+themselves within the browser window.  For Perl/Tk, this only seems to work with
+Tk800.xxx.  The hash buckets are as follows:
+
+	Plugin::brinfo{xwindow_id} -- contains the XWID of the browser.
+	Plugin::brinfo{x_min}      -- the x-coordinate of the upper left corner
+                                      of the browser-provided window, in pixels.
+	Plugin::brinfo{y_min}      -- y-coordinate of the upper left corner.
+	Plugin::brinfo{x_len}      -- window width, in pixels.
+	Plugin::brinfo{y_len}      -- window height, in pixels.
+	Plugin::brinfo{display}    -- the Xlib Display pointer (essentially
+			 	      never used).
+	Plugin::brinfo{version}    -- the version string identifying the version
+                                      of the plugin.
+				   
+For additional information on making use of these parameters in your scripts,
+see the INSTALL and HOW_TO documents that come with this distribution, and
+the example plugins in the samples/ directory.
+
+It can't be emphasized too much that useful Perl scripts are difficult to make
+secure.  Scripts browsed from un-trusted sources should be considered extremely
+dangerous.  We've attempted to overcome this difficulty by implementing an
+authorization mechanism in this plugin.  But the mechanism has had essentially
+no testing to verify that it actually provides any degree of security.  We are
+eager to have such testing performed by others more knowlegeable about
+security issues and welcome any feedback concerning it or any other issues
+regarding the way the plugin has been implemented. 
+
+That warning aside, please try it out.  This is currently alpha code and hasn't
+yet experienced Eric Raymond's obligatory rewrite, so it's expected to undergo 
+many revisions.  Please feel free to help with that process in any way you like,
+with suggestions, flames, code contributions or whatever.
+
+Frank Holtry

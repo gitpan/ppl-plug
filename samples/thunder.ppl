@@ -1,0 +1,37 @@
+#!/usr/local/bin/perl -w
+#
+# This Perl/Tk plugin is courtesy of Slaven Rezic <eserte@cs.tu-berlin.de>.
+
+use Tk;
+
+my $unit = 'km';
+
+$top = new MainWindow(-use => $Plugin::brinfo{xwindow_id});
+
+$top->Button(-text => 'Lightning',
+             -command => sub {
+                 $t0 = Tk::timeofday();
+                 $status->grid(-row => 1, -column => 0, -columnspan => 2,
+                               -sticky => 'ew');
+             })->grid;
+$top->Button(-text => 'Thunder',
+             -command => sub {
+                 $t1 = Tk::timeofday();
+                 $status->gridForget;
+                 recalc();
+             })->grid(-column => 1, -row => 0);
+
+$top->Optionmenu(-options => ['km', 'miles'],
+                 -variable => \$unit,
+                 -command => \&recalc,
+                )->grid(-row => 1, -column => 1, -sticky => 'ew');
+$l = $top->Label->grid(-row => 1, -column => 0, -sticky => 'e');
+
+$status = $top->Label(-text => 'Waiting for thunder ...');
+
+MainLoop;
+
+sub recalc {
+    return unless defined $t0;
+    $l->configure(-text => sprintf("%.1f", ($t1-$t0)*331/($unit eq 'miles' ? 1609 : 1000)));
+}

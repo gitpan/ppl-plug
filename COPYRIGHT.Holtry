@@ -1,0 +1,25 @@
+Frank Holtry
+<fholtry@lucent.com>
+
+Steve Lidie
+<sol0@Lehigh.EDU>
+
+Netscape API templates from at least two versions of the sdk were used in
+developing this project.
+
+The pattern for this plugin was set by Stan Melax's libopenglplugin.  Subsequent
+modifications have probably rendered the result almost unrecognizable to Stan
+(and that is not necessarily a good thing).  Still, there are some bits of his
+original code remaining in it and the basic design -- ie a plugin which execs a 
+perl interpreter and passes the program to it along with the window information
+-- is his.  To whatever extent it still applies, his original copyright is 
+in force on this copy (see the COPYRIGHT.Melax file).  Anything not covered by
+that is covered under the Perl Artistic license.  Under either copyright, you
+are free to copy, modify and distribute as you see fit, so long as credit is
+given to the original authors.  Neither copyright provides any guarantee
+whatever as to the suitability of the code for any purpose, nor do either
+incur any liabilities for any of the authors or their employers.  The code
+is provided free of charge and may be used or abused any way you like, so
+long as the foregoing is kept in mind.
+
+F.H. 11/98

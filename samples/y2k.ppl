@@ -1,0 +1,37 @@
+#!/usr/local/bin/perl -w
+#
+# y2k - seconds before the big hoedown.
+# 
+# Stephen.O.Lidie@Lehigh.EDU, LUCC, 1998/05/05.
+
+use Tk;
+use Time::Local;
+use strict;
+
+my $y2k = timelocal(0, 0, 0, 1 , 0, 2000);
+my($bg, $countdown) = ('white', '');
+
+my $mw = new MainWindow( '-use' => $Plugin::brinfo{xwindow_id});
+my $g = $Plugin::brinfo{x_len} . 'x' . $Plugin::brinfo{y_len};
+$mw->geometry($g);
+$mw->configure(-background => $bg);
+my $label = $mw->Label(-text => 'Seconds Until All Hell Breaks Loose', -background => $bg)->grid;
+my $time = $mw->Label(-textvariable => \$countdown, -background => $bg)->grid;
+my $tid = $mw->repeat(1000 => \&countdown);
+$mw->bind('<Double-Button-1>' => sub {exit});
+MainLoop;
+
+sub countdown {
+    my $c = $countdown = $y2k - time();
+    1 while $countdown =~ s/^(-?\d+)(\d{3})/$1,$2/;
+    return if $c > 10;
+    if ($c == 10 ) {
+	$time->configure(qw/-background red -foreground yellow/);
+    } elsif ($c <= 0) {
+	$tid->cancel;
+	$label->gridForget;
+	$countdown = 'Now get to work fixing those bugs we all missed!';
+    }
+    $mw->idletasks;
+    $mw->bell;
+} # end countdown

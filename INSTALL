@@ -1,0 +1,279 @@
+Introduction
+------------
+
+Building and installing the PerlPlusPlugin requires several steps.  These
+include
+
+ -- Obtaining the source
+ -- Configuring the options
+ -- Building the source
+ -- Configuring the Server and the Browser
+ -- Creating the authorization CGI
+ 
+We'll detail these steps in the paragraphs that follow.
+
+Obtaining the Source
+--------------------
+
+[[ Where will the source be available?  CPAN, Hopefully ]] ***********************************
+
+What you need besides the source
+--------------------------------
+
+ -- Perl 5.004_04 minimum (Perl 5.005_4 or greater highly recommended)
+ -- Tk 800.010 or later if you plan to display Perl/Tk.  Tk402.004 will work,
+    but doesn't seem to be able to parent it's displays from the browser window.
+    They'll end up on the root instead.
+ -- Perl/OpenGL, available from CPAN, if you want to experiment with OpenGL
+    displays.
+ -- A web server capable of running CGI or Mod_Perl -- Apache highly
+    recommended.
+ -- A Netscape browser.  We've been testing with 4.04, 4.05, 4.06 and 4.5.
+
+Configuring the Makefile Options
+--------------------------------
+
+There are several options that have to be configured before the source can be
+built.  Some of these are relatively easy; some will require careful thought.
+These are all presently configured by editing the Makefile or np_perl.h.
+Eventually, we hope to have a configurator to make it easier.
+
+The DEBUG option is not particularly useful.  When it's set, it causes various 
+trace messages to be written to the browser's stderr.  Leave it set to '0',
+which turns off the messages (unless, of course you're insatiably curious.)
+
+PERL_ROOT is the full path name to the top of the directory where your Perl5 is
+installed, frequently something like /usr or /usr/local/. Perl's bin, lib and
+man directories usually reside below this directory.
+
+PERL_EXE is the full path to the executable Perl5 binary.  It usually looks
+something like ${PERL_ROOT}/bin/perl.  This needs to be a stable location for
+your Perl executable, since it gets compiled into the plug-in.  If you change
+this location after building the plug-in, you'll have to rebuild it.  (See
+ALLOW_ENV_CONFIG.)
+
+OPTIMIZER is whatever compiler option you need to set for the level of
+optimization you want your compiler to apply to the compiled code.  For many,
+-O works.  It can be left blank.
+
+MIME is a string that identifies the mime-type and file name extension that the
+plug-in will be called to respond to.  The format of the entry is:
+
+     MIME="<mime-type>:<extension>:<description>"
+
+We selected "application/x-perlplus:.ppl:Perl" as the default, but you may want
+to consider using something else.  The advantage in using the default is that
+it may eventually become a defacto standard and you would be able to browse
+sites anywhere on the Internet, assuming you established some sort of trust
+with them.  On the other hand, using a custom mime-type and extension could be
+one step in preventing your users from inadvertantly browsing sites or files
+you don't intend.  It would also make it less likely that someone using a
+differently configured plug-in could browse sensitive files from your site. 
+Also, if you don't have control over your web server and your web admin is
+reluctant or slow to add new mime-types, you might select one of the unused
+defaults available from most web servers.
+
+CGI_TYPE is a string that is passed to the server when it's POST method is
+invoked to start the cgi-bin application.  It must contain the keywords
+
+       "Content-type: <some mime-type>\nContent-length:".
+
+The value of Content-length and the next option, SECURE_CGI, get appended to
+CGI_TYPE by the plug-in and are passed as one of the arguments to the broswer's
+NPN_PostURLNotify method.  <some mime-type> should be chosen carefully.  It will
+be used by the server to recognize that this is a request to invoke a cgi
+program.  Similar arguments can be applied to this choice as to the previous
+option, but in general the default should probably be used.
+
+SECURE_CGI is the URL that will be used by the plug-in to invoke your
+authorization cgi-bin script.  Since this gets compiled into the plug-in, you
+should choose a relatively stable server and path.  You may need to consult
+your web server admin to find out whether cgi-bin is enabled and what the URL
+should look like.  (See ALLOW_ENV_CONFIG.)
+
+INCLUDES is the path to your system's header files, usually /usr/include.
+
+RM is the path to your system's 'rm' command, usually /bin/rm.
+
+ALLOW_ENV_CONFIG is a boolean, which defaults to FALSE.  If configured as
+TRUE, the plugin's perl executable pathname and cgi-bin URL can be overridden
+via the environment variables PPL_PERL_EXE and PPL_SECURE_CGI, respectively.
+
+PERL5005 is a boolean which adds the new thread-related opcodes to the level 4
+opcode set.  If you are using Perl5.005+, set this to '1', otherwise, set it to
+'0'.
+
+One additional Makefile variable you may wish to consider changing is the 
+SHAREDTARGET variable.  It sets the name of the dynamic library file that is
+created.  In the event you wanted to create multiple special-purpose versions
+of the plug-in, you might want to give each a different name so that Netscape
+can treat them as different plug-ins.  Otherwise, it can be left as is.
+
+Creating a user-defined set of opcodes.
+---------------------------------------
+
+As noted in the README, six levels of opcode restriction security have been
+built into the plug-in.  These are named level 0 thru level 5.  Level 5 is
+intended to be user-defined.  The levels are created as sets of pre-compiler
+macros, defined in the np_perl.h file.  Each macro is named to correspond with
+the opsets defined in the Opcode extension module.  Before attempting to modify
+these, you need to read the Opcode(3) man page to get an idea of the available
+opcodes and their relative security.  A few new opcodes were added in Perl5.005
+to support threads, so you may need to look at the opcode.h file in your Perl5
+distribution as well.  The value for each macro is a string that can contain
+opcode names and the names of the predefined opsets from the Opcode extension. 
+Look carefully at the example, which we defined to aid in testing and
+debugging.  It contains previously defined level 2 macros plus strings listing
+additional opcodes.  This is probably the easiest way to customize a security
+level to your needs.  Look also at the other pre-defined levels, since they
+include most of the available techniques for defining a level.  Pay particular
+attention to the fact that there needs to be a space character between opcode
+names in the list and if you're mixing predefined macros and string lists,
+you'll need a space at the beginning of your list as well.  
+
+Building the Source
+-------------------
+
+The Makefile presently builds targets for three architectures: SGI, Solaris with
+gcc, and Linux.  It should build in other environments as well, but may require
+modifications to the Makefile.  If you succeed in building it for other
+machines, please forward your Makefile changes and we'll add them to the
+distribution.  The code is really simple C, so even if your OS isn't
+predefined, try one that is!
+
+To build a distribution, run
+
+	make clean;
+	make <irix|solaris|linux>;
+
+and, if the build was successful:
+
+	make install;
+
+Note that the install target currently assumes you will install this in your
+${HOME}/.netscape/plugins directory.  You will need to modify the target if you
+want make to install it in a shared directory.
+
+Configuring the Server
+----------------------
+
+Before the web server will pass browsed files properly to the plug-in, it must
+be configured to associate the mime-type you chose with the file extension you
+chose, for both the plug-in and the cgi scripts.  This is typically a web
+admin's task, so I won't go into the details here.  However, you will need to
+work with your web admin to make certain it's set up properly.  The information
+you need to provide him/her is the mime-type and file name extension you've
+chosen for the plug-in and the mime-type and extension you want for the cgi
+scripts.  
+
+
+Configuring the Browser
+-----------------------
+
+"make install" usually copies the plug-in to ${HOME}/.netscape/plugins, which is
+one of the default locations the browser examines for plug-ins to load.  But it
+also looks in some other common areas such as /usr/local/lib/netscape/plugins.
+If you want everyone at your site to use the plug-in, you may want to consider
+installing it in a common area and this may require help from your sys admin or
+web admin.
+
+Once you have the plug-in installed in one of the search paths, Netscape will 
+discover it the next time it is started.  You can verify that Netscape knows
+about the plug-in by selecting "Help - About Plugins".  This will give you an
+informational display showing all the plug-ins the browser knows about,
+including this one.  However, this one will probably not be enabled.
+
+To do that, you need to "Edit -- Preferences -- Navigator -- Applications".  
+Select "New".  This should bring up a dialog box with entry fields and
+push-buttons.  Enter the plug-in's mime-type and file extensions (be sure to
+include the '.' at the beginning of the extension -- don't ask me why!) and
+whatever text description you want to see in the list of applications.  At
+this point, the 'Plug in' button, which was grayed out and inactive, should
+become active.  If not, check the spelling of the mime-type and extension. 
+Select it, then hit the 'OK' button.   The plug-in should now show up in the
+Application list as a Plugin.  It should also show up in the "Help -- About
+Plugins" as enabled.  If so great! it's almost ready to go; if not, go back
+and check all the installation steps, especially the spelling of the mime-type
+and extension.
+
+Creating the Authorization CGI
+------------------------------
+
+In order to complete the installation, you must create and install an
+'authorization' CGI script that can be accessed via the url you specified as
+the SECURE_CGI.  This script is only required to do one thing: it must return
+one of the six numeric characters in the range '0' thru '5' to the plug-in. 
+It can (and should) be much more elaborate, using the string it finds on it's
+standard input in some fashion to determine whether or not to permit the
+plug-in to execute the file the browser handed it.  We'll look at this issue
+in more detail in the HOW_TO document.  For now, here's the simple script we
+used to build and test the plug-in:
+
+
+#!/bin/sh
+#
+# perlplus-secure.cgi
+#
+# This script echos back to the plug-in a string consisting of a single numeric
+# character.  Current valid characters are 0, 1, 2, 3, 4, and 5.
+#
+# The first 'echo' tells the browser what mime-type is associated with this data
+# so that it will invoke the correct plug-in.  The second echo supplies the data,
+# which tells the plug-in which level of opcode restrictions you wish to use.
+ 
+echo="/usr/5bin/echo"
+echo="/bin/echo"
+
+log="/tmp/perlplus-secure.log"
+
+read  URL
+echo "$URL" > $log
+
+# Some potentially useful environment variables you can play with:
+#
+# DOCUMENT_ROOT=/ahome
+# GATEWAY_INTERFACE=CGI/1.1
+# HTTP_HOST=www.xyz.edu
+# HTTP_REFERER=http://www.xyz.EDU/~sol0/ptk/plop.ppl
+# HTTP_USER_AGENT='Mozilla/4.5C-SGI [en] (X11; I; IRIX 6.3 IP32)'
+# REMOTE_ADDR=a.b.c.d
+# REMOTE_PORT=12801
+# REQUEST_METHOD=POST
+# REQUEST_URI=/cgi-bin/perlplus-secure.cgi
+# SCRIPT_FILENAME=/home/wwwserv/cgi-bin/perlplus-secure.cgi
+# SCRIPT_NAME=/cgi-bin/perlplus-secure.cgi
+# SERVER_NAME=www.xyz.EDU
+# SERVER_PORT=80
+# SERVER_PROTOCOL=HTTP/1.0
+# SERVER_SOFTWARE=Apache/1.2.6
+
+# This example varies the security level as required for the sample plugins:
+
+url[0]="http://www.Lehigh.EDU/~sol0/ptk/neko.ppl"
+url[1]="http://www.Lehigh.EDU/~sol0/ptk/plop.ppl"
+url[2]="http://www.Lehigh.EDU/~sol0/ptk/y2k.ppl"
+
+sec[0]=4
+sec[1]=2
+sec[2]=2
+
+sec_level=1
+
+idx=0
+while [ "$idx" -lt ${#url[*]} ]; do
+    if [ "$URL" = "${url[$idx]}" ]; then
+        sec_level=${sec[$idx]}
+    fi
+    let idx=$idx+1
+done
+
+echo "  security level=$sec_level" >> $log
+                                                    
+$echo  "Content-type: application/x-perlplus:.ppl:Perl\n"
+$echo  "$sec_level"
+
+
+That's really all there is to it.  If you get this far, you should be able to 
+browse Perl scripts of many sorts from your web page and execute them.  See the
+HOW-TO document for details on writing the scripts and linking them to your web
+pages.

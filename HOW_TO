@@ -1,0 +1,138 @@
+
+
+			PerlPlus Plug-in How To's
+
+How to set up Web pages to invoke the Plug-in.
+---------------------------------------------
+
+The PerlPlus Plug-in can be used in either "embedded" or "full-screen" mode.
+In embedded mode, the display is created within a window area supplied by the
+browser and can share the display area with other html documents, images or
+even other plug-ins.  In full-screen mode, the plug-in has the entire Navigator
+display area to itself.  
+
+Embedded mode is established by using the Netscape html tags <embed> and
+</embed>.  This tag has several options and rather than treat all of them here,
+I'll simply suggest you go to relevant html books. Instead, I'll provide an
+example of one we used during development.
+
+After creating a Perl/Tk script, ptk_test.ppl,  and storing it in my public_html
+directory, I created a short html document, ptk_test.html, with the following
+lines:
+
+<HTML>
+<embed src=ptk_test.ppl width=800 height=800> </embed>
+</HTML>
+
+The value of 'src=' is simply the path, relative to ptk_test.html, of the
+Perl/Tk program you wish to run.  The value of width and height is the size,
+in pixels, of the display window you need to display all of your widgets.  The
+browser gives you this much and no more, so if your widgets need more than
+this, the rightmost and bottom-most will be truncated to fit.  You may need to
+use trial and error to establish a large enough area for your whole display. 
+If the area you request is larger than the area currently displayed by the
+browser, then the browser scrollbars can be used to display the remainder. 
+Both width and height are supplied to your program as Plugin::brinfo{x_len} and
+Plugin::brinfo{y_len}, so it may be able to resize it's display to fit within
+the requested area.
+
+For testing, I linked ptk_test.html to a higher-level web page that served as a
+menu of test cases.
+
+Full-screen mode is achieved simply by browsing a Perl/Tk program whose name
+includes the extension you used for the MIME variable you set up when you 
+installed the plug-in.  Full screen mode could be achieved for the previous 
+example by placing the following in an html document:
+
+<a href=ptk_test.ppl>ptk_test.ppl</a> (Perl/Tk)
+
+
+How to Use $Plugin::brinfo{}
+to Display Your Perl/Tk window
+In the Browser
+------------------------------
+
+The plug-in makes five window parameters available to the Perl script: the
+X-window ID of the browser-supplied window, the x and y pixel coordinates
+(relative to the browser) of the upper left corner of the browser-supplied
+window and the length of the x and y window dimensions, in pixels.  These can
+be accessed from the Plugin::brinfo{} hash as Plugin::brinfo{xwindow_id},
+Plugin::brinfo{x_min}, Plugin::brinfo{y_min}, Plugin::brinfo{x_len}, and
+Plugin::brinfo{y_len}, respectively.  In addition the Xlib Display pointer
+is available as Plugin::brinfo{display}. (This value, combined with the X-ID,
+allows you to perform low-level Xlib activities, something I can't ever imagine
+you'll want to do!)
+
+In Tk800.xxx, the top level widgets MainWindow and TopLevel both have a '-use'
+option which takes an X-window id as its value.  This option tells the widget
+to draw itself in the same space as the window whose X-window id is supplied
+as the value of the option.  To have one of these widgets display itself (and
+subsequently all its children) in the browser window, then, one needs to
+create it with some version of the following:
+
+	my $mainwin = new MainWindow( '-use' => $Plugin::brinfo{xwindow_id});
+
+or
+	my $toplevel = $mainwin->Toplevel( '-use' => $Plugin::brinfo{xwindow_id});
+
+During testing, I (F.H) was unable to place more than one top level widget in
+the browser window at a time.  In order to use the second approach, I had to
+first create a MainWindow on the root window, then withdraw it with
+
+	$mainwin->withdraw;
+
+after which a Toplevel child could be created.  This topic needs more
+investigation, since it would likely be useful to have more than one top level
+widget within a browser window.
+
+Note that Tk40x.xxx widgets don't seem to have the -use option.  You can execute
+Tk40x.xxx programs with the plug-in, but the widgets display on the root window
+rather than the browser.
+
+
+How to Set up a CGI-BIN Authorization script
+--------------------------------------------
+
+The PerlPlus plug-in requests authorization to run a Perl script by requesting
+that the server execute the cgi-bin script whose URL was configured in as
+SECURE_CGI when the plug-in was built.  The plug-in places the string "URL=<script
+url>" on the cgi-bin script's stdin when it is called.  "<script url>" is the URL
+where the Perl script was found that the plug-in is seeking to authorize.  So, for
+instance if you are browsing "http://my.server.com/testfile.ppl", what will appear
+on the authorization script's stdin will be "URL=http://my.server.com/testfile.ppl".
+The cgi-bin script can extract this URL and then via table lookup or some other
+computational means, select an appropriate authorization code to return to the
+plug-in.  Current authorization codes recognized by the plug-in are the numeric
+CHARACTERS '0', '1', '2', '3', '4' and '5'.  Authorization code '0' means
+'authorization denied' and causes the plug-in to purge the Perl script and return
+immediately to the browser.  Authorization codes '1' thru '4' allow the Perl
+compiler to compile increasingly LESS secure opcodes.  Authorization code '5' is
+intended to be user defined and by default simply extends authorization code '2' to
+include a few additional opcodes we found useful to aid in testing and debugging. 
+(For addtional information on the way opcode restriction security is implemented,
+see the README and INSTALL documents).  
+
+Once the cgi-bin script has determined an appropriate authorization code for
+this URL, it must return that information to the browser, which will hand it
+to the plug-in. In order to do that, it must place at least two lines on it's
+stdout.  The first of these tells the browser the mime-type (Content-type) to
+be associated with this transmission.  This allows the browser to determine
+which plug-in (or other helper application) to send the data to.  The second
+line is simply the authorization character code.  The first line is formatted
+as follows:
+
+"Content-type: <plug-in mime type>\n"
+
+<plug-in mime type> is the string you defined as MIME when you configured the 
+plug-in.  Be careful with the embedded newline.  It signals to the browser that
+subsequent lines are to be treated as data.  Depending on which language you
+are using, you may or may not need to supply one explicitly.  If your script
+language supplies one implicitly, as many "echo's" do, you may end up with two
+of them and the plug-in will treat the NULL string after the first one as the
+authorization code and fail to authorize the URL.
+
+The second line returned by the cgi script is simply the authorization code.
+It should be a single-character string, with the character code of the
+authorization level you wish applied to this URL.
+
+For an example, see perlplus-secure.cgi in the src/ directory.

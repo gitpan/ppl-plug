@@ -1,0 +1,29 @@
+
+
+Here are some sample plugins.  The number in parentheses represents the security
+level required to run the plugin.
+
+
+neko.ppl (4)	Masayuki Koba's xneko game.  You will need to install Tk::LockDisplay
+		from http://www.perl.com/CPAN-local/authors/Stephen_O_Lidie/ so the
+		Pixmaps are available.
+
+plop.ppl (2)	Plot continuous functions of the form y = F(x).
+
+y2k.ppl (2)	A countdown to the big hoedown.
+
+thunder.ppl (2) Compute distance between you and lightning.
+
+cube.ppl (1)	A Perl/OpenGL program by Stan Melax.  Draws a cube on your
+		browser.
+
+quest.ppl (1)	Another Perl/OpenGL by Stan.  A maze you move around in with
+		your mouse.
+
+fun.ppl (1)	And yet another by Stan.  A Startrek adventure!
+
+ptk_test.ppl (2) A simple Perl/Tk test pattern.
+
+
+In addition, there are some simple html files for cube, quest, fun and
+ptk_test to illustrate how to embed them in a web page.
